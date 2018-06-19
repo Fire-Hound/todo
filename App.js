@@ -1,41 +1,31 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-const k = 0;
+import Todo from './components/todo';
 
 export default class App extends React.Component {
   state = {
     todo : [],
-    i: []
   }
-  removeTodo = (index) => {
+  remove = (index) => {
+    let mapped = [...this.state.todo].map(
+      (v,i)=>{
+        if(i==index) return null;
+        return(v)
+      }
+    )
     this.setState({
-      todo : [...this.state.todo].filter((value)=>value!=this.state.todo[index]),
-      i : [...this.state.i].filter((value)=>value!=index)
-      // todo: this.state.todo.filter((value)=>value!=this.state.todo[index])
+      todo : mapped
     })
+    console.log(mapped)
   }
-  addTodo = () => {
+  add = () => {
+
     this.setState({
       todo: [ ...this.state.todo,
-
-        <View key = {++k}
-        style={{ flex:1, flexDirection: 'row', 
-        justifyContent: 'space-around', alignItems: 'center'}}>
-          <TouchableOpacity style={styles.remove} 
-          onPress={this.removeTodo.bind(this, this.state.i[this.state.i.length-1])}>
-            <Icon name='md-remove-circle' color='#ee0000' size={40}/>
-          </TouchableOpacity>
-
-          <View style={styles.todo}>
-            <TextInput autoFocus={true} multiline={true} placeholder={"Type something"}
-            underlineColorAndroid="#ffffff"/>
-          </View>
-        </View>
+        <Todo key={this.state.todo.length} 
+        styles={styles} remove={this.remove.bind(this, this.state.todo.length)}/>
       ],
-      i :[...this.state.i, (this.state.i[this.state.i.length-1]+1 || 0)] 
     }
   )
 
@@ -47,8 +37,7 @@ export default class App extends React.Component {
         {this.state.todo}
         
       </ScrollView>
-<Text> {this.state.i} </Text>
-      <TouchableOpacity style={styles.add} onPress={this.addTodo}>
+      <TouchableOpacity style={styles.add} onPress={this.add}>
           <Icon name='md-add-circle' color='#00ee00' size={61}/>
         </TouchableOpacity>
      </View>
